@@ -1,8 +1,9 @@
 use crate::rune_find1::{rune_find1};
 use crate::rune_find2::{rune_find2};
 
-use titan_client::TitanClient;
 use titan_client::TitanApi;
+use titan_client::TitanClient;
+use tokio;
 
 mod rune_find1;
 mod rune_find2;
@@ -12,22 +13,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let _ = rune_find1();
     // let _ = rune_find2();
 
-    let client = TitanClient::new("http://127.0.0.1:3030");
+    let client = TitanClient::new("http://localhost:3030");
 
-    let runes = client.get_runes(None).await?;
-    println!("Runes list: {:?}", runes);
+    let status = client.get_status().await?;
+    println!("Status: {:?}", status);
 
-    if let Some(first_rune) = runes.items.first() {
-        println!("First rune: {:?}", first_rune);
 
-        let rune_info = client.get_rune(&first_rune.id).await?;
-        println!("Rune info: {:?}", rune_info);
+    let tip = client.get_tip().await?;
+    println!("Block Tip: {:?}", tip);
 
-        let rune_txs = client.get_rune_transactions(&first_rune.id, None).await?;
-        println!("Rune transactions: {:?}", rune_txs);
-    } else {
-        println!("No runes found in indexer.");
-    }
+    let address_data = client.get_address("your-bitcoin-address").await?;
+    println!("Address Data: {:?}", address_data);
 
     Ok(())
 }
