@@ -189,7 +189,7 @@ pub async fn get_recent_block_hashes(client: &Client, count: usize) -> Result<Ve
         .text()
         .await?;
 
-    println!("🔍 Получаем {} последних блоков, начиная с: {}", count, last_block_hash);
+    println!("Получаем {} последних блоков, начиная с: {}", count, last_block_hash);
 
     let mut current_hash = last_block_hash;
 
